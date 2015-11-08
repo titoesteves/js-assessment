@@ -10,12 +10,15 @@ exports.asyncAnswers = {
   },
 
   manipulateRemoteData : function(url) {
-  	return {
-  		then: function(cb){
-  			return (cb)(url);
-  			console.log(result)
-  			return result;
-  		}
-  	};
+  	var dfd = $.Deferred();
+
+  	    $.ajax(url).then(function(resp) {
+  	      var people = $.map(resp.people, function(person) {
+  	        return person.name;
+  	      });
+  	      dfd.resolve(people.sort());
+  	    });
+
+  	    return dfd.promise();
   }
 };
